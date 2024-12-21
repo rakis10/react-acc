@@ -1,21 +1,30 @@
 import { useState } from "react";
 import "./App.css";
+import Footer from "./Footer";
+import Header from "./Header";
 
 export default App;
 
 function CityTasks({ city, tasks, onTaskComplete }) {
   const [isOpen, setIsOpen] = useState(false);
   const completedTasks = tasks.filter((task) => task.completed).length;
+  const allTasksCompleted = completedTasks === tasks.length;
 
   return (
-    <div className="w-full max-w-md p-2 mx-auto bg-white rounded-2xl">
+    <div className="w-full h-full max-w-md mx-auto p-2 bg-white ">
       <div
         className="flex justify-between w-full px-4 py-2 text-sm font-medium text-left text-purple-900 bg-purple-100 rounded-lg hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75 cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span>{city}</span>
         <span>
-          Tasks ({completedTasks}/{tasks.length})
+          {allTasksCompleted ? (
+            <span className="px-2 py-1 text-xs font-semibold text-green-800 bg-green-200 rounded-full">
+              Success
+            </span>
+          ) : (
+            `Tasks (${completedTasks}/${tasks.length})`
+          )}
         </span>
         <svg
           className={`w-5 h-5 text-purple-500 transition-transform ${
@@ -70,19 +79,73 @@ function CityTasks({ city, tasks, onTaskComplete }) {
 function App() {
   const [tasksByCity, setTasksByCity] = useState({
     "New York": [
-      { id: 1, title: "Task 1", description: "Description 1", completed: true, image: "https://via.placeholder.com/150" },
-      { id: 2, title: "Task 2", description: "Description 2", completed: false, image: "https://via.placeholder.com/150" },
-      { id: 3, title: "Task 3", description: "Description 3", completed: true, image: "https://via.placeholder.com/150" },
+      {
+        id: 1,
+        title: "Task 1",
+        description: "Description 1",
+        completed: true,
+        image: "https://via.placeholder.com/150",
+      },
+      {
+        id: 2,
+        title: "Task 2",
+        description: "Description 2",
+        completed: false,
+        image: "https://via.placeholder.com/150",
+      },
+      {
+        id: 3,
+        title: "Task 3",
+        description: "Description 3",
+        completed: true,
+        image: "https://via.placeholder.com/150",
+      },
     ],
     "Los Angeles": [
-      { id: 4, title: "Task 4", description: "Description 4", completed: false, image: "https://via.placeholder.com/150" },
-      { id: 5, title: "Task 5", description: "Description 5", completed: true, image: "https://via.placeholder.com/150" },
-      { id: 6, title: "Task 6", description: "Description 6", completed: false, image: "https://via.placeholder.com/150" },
+      {
+        id: 4,
+        title: "Task 4",
+        description: "Description 4",
+        completed: false,
+        image: "https://via.placeholder.com/150",
+      },
+      {
+        id: 5,
+        title: "Task 5",
+        description: "Description 5",
+        completed: true,
+        image: "https://via.placeholder.com/150",
+      },
+      {
+        id: 6,
+        title: "Task 6",
+        description: "Description 6",
+        completed: false,
+        image: "https://via.placeholder.com/150",
+      },
     ],
     Chicago: [
-      { id: 7, title: "Task 7", description: "Description 7", completed: true, image: "https://via.placeholder.com/150" },
-      { id: 8, title: "Task 8", description: "Description 8", completed: false, image: "https://via.placeholder.com/150" },
-      { id: 9, title: "Task 9", description: "Description 9", completed: true, image: "https://via.placeholder.com/150" },
+      {
+        id: 7,
+        title: "Task 7",
+        description: "Description 7",
+        completed: true,
+        image: "https://via.placeholder.com/150",
+      },
+      {
+        id: 8,
+        title: "Task 8",
+        description: "Description 8",
+        completed: false,
+        image: "https://via.placeholder.com/150",
+      },
+      {
+        id: 9,
+        title: "Task 9",
+        description: "Description 9",
+        completed: true,
+        image: "https://via.placeholder.com/150",
+      },
     ],
   });
 
@@ -97,9 +160,16 @@ function App() {
 
   return (
     <div>
+      <Header tasksByCity={tasksByCity} />
       {Object.entries(tasksByCity).map(([city, tasks]) => (
-        <CityTasks key={city} city={city} tasks={tasks} onTaskComplete={handleTaskComplete} />
+        <CityTasks
+          key={city}
+          city={city}
+          tasks={tasks}
+          onTaskComplete={handleTaskComplete}
+        />
       ))}
+      <Footer />
     </div>
   );
 }
