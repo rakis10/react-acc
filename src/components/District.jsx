@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
 
 const District = ({ district, onComplete, car, addToLog }) => {
@@ -14,6 +14,14 @@ const District = ({ district, onComplete, car, addToLog }) => {
     { cash: 600, items: ["blue", "red"] },
     { cash: 800, items: ["red"] },
   ];
+
+  useEffect(() => {
+    // Reset state whenever a new district starts
+    setRace(1);
+    setCompleted(false);
+    setModalOpen(false);
+    setModalMessage("");
+  }, [district]);
 
   const handleRace = () => {
     const carPerformance = car.stats.speed + car.stats.handling + car.stats.stability;
@@ -36,7 +44,7 @@ const District = ({ district, onComplete, car, addToLog }) => {
     setModalMessage(`You defeated the boss! Rewards: $${rewards.cash}, Items: ${rewards.items.join(", ")}`);
     setModalOpen(true);
     addToLog(`Boss fight in District ${district} won!`);
-    onComplete(rewards);
+    onComplete(rewards, true); // Notify the parent about completion and boss fight
   };
 
   return (
