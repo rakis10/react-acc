@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-const Shop = ({ car, inventory, setInventory, addToLog }) => {
+const Shop = ({ car, setCash ,cash,inventory, setInventory, addToLog }) => {
   const [modalMessage, setModalMessage] = useState("");
-  const [isOpen, setIsOpen] = useState(false); // Toggle for collapsing the shop
+  const [isOpen, setIsOpen] = useState(true); // Toggle for collapsing the shop
 
   // Prices for cases and cars
   const prices = {
@@ -18,11 +18,11 @@ const Shop = ({ car, inventory, setInventory, addToLog }) => {
 
   // Handle case purchase
   const handleCasePurchase = (type) => {
-    if (car.cash >= prices.cases[type]) {
-      car.cash -= prices.cases[type];
+    if (cash >= prices.cases[type]) {
+      setCash((prev) => prev - prices.cases[type]);
       setInventory((prev) => ({
         ...prev,
-        cases: { ...prev.cases, [type]: prev.cases[type] + 1 },
+        cases: [...prev.cases, type],
       }));
       addToLog(`Bought a ${type} case for $${prices.cases[type]}.`);
       setModalMessage(`Successfully bought a ${type} case!`);

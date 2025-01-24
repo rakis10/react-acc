@@ -4,10 +4,11 @@ import Log from "./components/Log";
 import Inventory from "./components/Inventory";
 import Car from "./components/Car";
 import Shop from "./components/Shop";
+import IMAGES from "./Images";
 
 const App = () => {
   const [district, setDistrict] = useState(1); // Current district
-  const [cash, setCash] = useState(0); // Player's cash
+  const [cash, setCash] = useState(1000); // Player's cash
   // const [inventory, setInventory] = useState([]); // Inventory items
   const [inventory, setInventory] = useState({
     cases: [],
@@ -71,11 +72,18 @@ const App = () => {
     // setInventory((prev) => ); // Remove box
     // console.log([...inventory.items, item]);
 
-    setInventory((prev) => ({
-      ...prev,
-      cases: prev.cases.filter((box) => box !== type),
-      items: [...(prev.items || []), item],
-    })); // Add new item
+    setInventory((prev) => {
+      const casesCopy = [...prev.cases];
+      const index = casesCopy.indexOf(type);
+      if (index !== -1) {
+        casesCopy.splice(index, 1); // Remove only one instance of the box
+      }
+      return {
+        ...prev,
+        cases: casesCopy,
+        items: [...(prev.items || []), item],
+      };
+    });
     setLog((prev) => [...prev, `Opened a ${type} box and received: ${item}`]);
   };
 
@@ -128,7 +136,17 @@ const App = () => {
       },
       upgrades: { ...prev.upgrades, [type]: rarity },
     }));
-    setInventory((prev) => ({...prev, items: prev.items.filter((item) => item !== upgrade)}));
+    setInventory((prev) => {
+      const itemsCopy = [...prev.items];
+      const index = itemsCopy.indexOf(upgrade);
+      if (index !== -1) {
+      itemsCopy.splice(index, 1); // Remove only one instance of the upgrade
+      }
+      return {
+      ...prev,
+      items: itemsCopy,
+      };
+    });
     addToLog(
       `Applied "${upgrade}" to your car. Increased ${statToUpgrade} by ${statIncrease}.`
     );
@@ -149,7 +167,6 @@ const App = () => {
         addToLog={addToLog}
       />
       <Car car={car} />
-      {inventory.cases.length}
       <Inventory
         inventory={inventory}
         openBox={openBox}
